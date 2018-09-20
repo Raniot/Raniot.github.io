@@ -135,7 +135,7 @@
 
                 $(function() {
                   $('#toggle-led2').change(function() {
-                    sendAction("led2",{"status": $(this).prop('checked')});
+                    sendAction("led2",{"value": $(this).prop('checked')});
                   });
                 });
 
@@ -338,14 +338,14 @@ socket.onerror = function (error) {
             <script>
 
 function sendAction(type,value){
-  console.log(" You are here: ("+latitude+","+longitude+")");
+  // console.log(" You are here: ("+latitude+","+longitude+")");
 
   $.ajax({
       url: 'https://api.evrythng.com/thngs/'+thngId+'/actions/'+type+'?access_token='+key,//#A
       dataType: 'json', //#B
       type: 'post', //#B
       contentType: 'application/json', //#B
-      data: JSON.stringify({"type": type, "thng": thngId, "customFields":value,"location":{"position":{"type": "Point","coordinates": [longitude, latitude]}},"locationSource":"sensor"}), //#C
+      data: JSON.stringify({"type": type, "thng": thngId, "customFields":true}), //#C
       processData: false,
       success: function( data, textStatus, jQxhr ){ //#D
           $('#response pre').html( JSON.stringify( data ) );
