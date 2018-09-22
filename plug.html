@@ -159,7 +159,6 @@
 
           <hr>
           <h3>Properties</h3>
-          <h5>Temperature and humidity graph</h5>
 
             <div class="graph"></div>
 
@@ -173,23 +172,16 @@
                 height = 200
     
             var groups = {
-                current: {
+                temp: {
                     value: 0,
                     color: 'orange',
                     data: d3.range(limit).map(function() {
                         return 0
                     })
                 },
-                target: {
+                humi: {
                     value: 0,
                     color: 'green',
-                    data: d3.range(limit).map(function() {
-                        return 0
-                    })
-                },
-                output: {
-                    value: 0,
-                    color: 'grey',
                     data: d3.range(limit).map(function() {
                         return 0
                     })
@@ -201,7 +193,7 @@
                 .range([0, width])
     
             var y = d3.scale.linear()
-                .domain([0, 100])
+                .domain([0, 105])
                 .range([height, 0])
     
             var line = d3.svg.line()
@@ -218,11 +210,14 @@
                 .attr('width', width)
                 .attr('height', height + 50)
 
-            // svg.append("g").call(d3.axisLeft(y));
+            svg.append('g')
+                .attr('class', 'y axis')
+                .call(y.axis = d3.svg.axis().scale(y).orient('right'))
 
-            // svg.append('g')
-            //     .attr('class', 'y axis')
-            //     .call(y.axis = d3.svg.axis().scale(y).orient('left'))
+            svg.append("text")
+                  .attr("x",200)
+                  .attr("dy", "1em")
+                  .text("Temperature and humidity graph");    
 
             var axis = svg.append('g')
                 .attr('class', 'x axis')
@@ -302,79 +297,53 @@
 
           <script>
             var url = 'wss://ws.evrythng.com:443/thngs/' + thngId + '/properties?access_token=' + key;
-            var socket = new WebSocket(url); //#A
-            socket.onmessage = function (message) { //#B
+            var socket = new WebSocket(url);
+            socket.onmessage = function (message) {
               var content = JSON.parse(message.data);
-              console.log('Property update : ', content[0]); //#C
+              console.log('Property update : ', content[0]);
               if (content[0].key == "temp") {
-                groups.current.value = content[0].value
-                tick()
-                // updateTempChart(content[0].key, content[0].value, content[0].timestamp); //#D
+                groups.temp.value = content[0].value
               }
-              if (content[0].key == "humi") {
-                groups.target.value = content[0].value
-                // updateHumiChart(content[0].key, content[0].value, content[0].timestamp); //#D
+              else if (content[0].key == "humi") {
+                groups.humi.value = content[0].value
               }
+              tick()
               $('#value-' + content[0].key).html(content[0].value); //#E
             };
             socket.onerror = function (error) {
               console.log('An error occurred while trying to connect to a WebSocket!');
               console.log(error);
             };
-//#A Subscribes to all properties of this Thng (via secure WebSockets)
-//#B Each time we receive a WS message, this will be called
-//#C We parse the message content (note: it's an array!)
-//#D Call this to update the temp graph (function not shown)
-//#E Use the property name to update the badge
           </script>
 
           <script>
             function sendAction(type, value) {
               console.log(" You are here: (" + latitude + "," + longitude + ")");
               $.ajax({
-                url: 'https://api.evrythng.com/thngs/' + thngId + '/actions/' + type + '?access_token=' + key,//#A
-                dataType: 'json', //#B
-                type: 'post', //#B
-                contentType: 'application/json', //#B
-                data: JSON.stringify({ "type": type, "thng": thngId, "customFields": value, "location": { "position": { "type": "Point", "coordinates": [longitude, latitude] } }, "locationSource": "sensor" }), //#C
+                url: 'https://api.evrythng.com/thngs/' + thngId + '/actions/' + type + '?access_token=' + key,
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({ "type": type, "thng": thngId, "customFields": value, "location": { "position": { "type": "Point", "coordinates": [longitude, latitude] } }, "locationSource": "sensor" }),
                 processData: false,
-                success: function (data, textStatus, jQxhr) { //#D
+                success: function (data, textStatus, jQxhr) {
                   $('#response pre').html(JSON.stringify(data));
                 },
-                error: function (jqXhr, textStatus, errorThrown) {//#E
+                error: function (jqXhr, textStatus, errorThrown) {
                   console.log(errorThrown);
                 }
               });
             }
-//#A The custom actions endpoint in EVRYTHNG
-//#B We POST a JSON document
-//#C The payload to POST
-//#D If successful, update the "response" html element
-//#E If an error, display in the console
           </script>
 
         </div>
 
       </div>
     </div>
-
-    <!-- Footer
-================================================== -->
     <footer class="bs-docs-footer" role="contentinfo">
       <div class="container">
-
-        <p>Built with the amazing D3, Bootstrap, and bootstraptoggle.</p>
-
+        <p>Team RanIoT.</p>
       </div>
     </footer>
-
-    <!-- Bootstrap core JavaScript
-================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-
-
-
-
 </body>
-
 </html>
