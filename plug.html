@@ -44,7 +44,7 @@
     });
   </script>
 
-  <title>Web Thing Controller</title>
+  <title>IoT - Milestone 3: Storing & Retrieving</title>
 
   <style class="anchorjs"></style>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -93,8 +93,8 @@
   <!-- Docs page layout -->
   <div class="bs-docs-header" id="content" tabindex="-1">
     <div class="container">
-      <h1>Web Thing Controller</h1>
-      <p>Control Web Things via EVRYTHNG.</p>
+      <h1>IoT - Milestone 3: Storing & Retrieving</h1>
+      <p>Control the Pi at the IP 89.150.134.103, by the use of EVRYTHNG.</p>
     </div>
   </div>
 
@@ -103,7 +103,7 @@
       <div class="col-md-9" id="the-list" role="main">
         <div class="bs-docs-section">
 
-          <h2>My WoT Plug</h2>
+          <h2>WoT site</h2>
 
           <hr>
           <h3>Actions</h3>
@@ -144,7 +144,7 @@
           </div>
 
 
-          <h5>Response</h5>
+          <!-- <h5>Response</h5>
 
           <div class="panel-group" id="accordion">
             <div class="panel panel-default" id="panel2">
@@ -155,18 +155,11 @@
                 <pre></pre>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <hr>
           <h3>Properties</h3>
-
-          <!-- <ul class="list-group">
-              <li class="list-group-item">
-                <span id="value-temp" class="badge">0.0</span>
-                temp
-              </li>
-            </ul> -->
-
+          <h5>Temperature and humidity graph</h5>
 
             <div class="graph"></div>
 
@@ -225,15 +218,16 @@
                 .attr('width', width)
                 .attr('height', height + 50)
 
+            // svg.append("g").call(d3.axisLeft(y));
+
+            // svg.append('g')
+            //     .attr('class', 'y axis')
+            //     .call(y.axis = d3.svg.axis().scale(y).orient('left'))
+
             var axis = svg.append('g')
                 .attr('class', 'x axis')
                 .attr('transform', 'translate(0,' + height + ')')
                 .call(x.axis = d3.svg.axis().scale(x).orient('bottom'))
-    
-            svg.append('g')
-                .attr('class', 'y axis')
-                .style("fill", "steelblue")
-                .call(x.axis = d3.svg.axis().scale(y).ticks(6).orient('left'))
     
             var paths = svg.append('g')
     
@@ -286,11 +280,11 @@
           <ul class="list-group">
             <li class="list-group-item">
               <span id="value-temp" class="badge">0</span>
-              temp
+              <p style="color:orange">temp</p>
             </li>
             <li class="list-group-item">
               <span id="value-humi" class="badge">0</span>
-              humi
+              <p style="color:green">humi</p>
             </li>
             <li class="list-group-item">
               <span id="value-pir" class="badge">false</span>
